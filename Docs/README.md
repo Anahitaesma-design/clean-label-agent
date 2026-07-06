@@ -1,7 +1,7 @@
 # 🌿 Clean Label Agent
 
-> **An AI agent that tells you whether the products in your life are safe — and helps you find safer ones.**
-> Submitted to the Google × Kaggle 5-Day AI Agents Capstone under the **Agents for Good** track.
+> **An AI agent that tells you whether the products in your life are safe — and teaches you why, in plain English.**
+> Submitted to the Google × Kaggle 5-Day AI Agents Capstone under the **Agents for Good** track: managing public health and advancing education, one scan at a time.
 
 Scan or name any consumer product — a food item, a piece of cookware, a skincare product, or a cleaning supply — and the Clean Label Agent identifies it, checks every ingredient against public safety databases, and returns a clear **SAFE / CAUTION / UNSAFE** verdict with a plain-English explanation, cited sources, and a safer alternative you can buy.
 
@@ -32,6 +32,8 @@ Every day, people put products in, on, and around their bodies without any real 
 
 The information *exists* — in food databases, cosmetic ingredient registries, and government chemical-hazard repositories — but it is scattered, technical, and inaccessible at the moment a person actually needs it: standing in a store, holding the product.
 
+This is a public health problem as much as an information problem. Chronic, low-level exposure to endocrine disruptors, carcinogens, and persistent chemicals through everyday products is a real population-scale concern — one that accumulates silently through thousands of small, uninformed purchasing decisions. Closing the information gap at the point of purchase is a direct way an agent can help manage that risk.
+
 ## The Solution
 
 The **Clean Label Agent** closes that gap. Give it a product by **barcode, name, photo, or ingredient list**, and it:
@@ -45,7 +47,7 @@ The **Clean Label Agent** closes that gap. Give it a product by **barcode, name,
 > **Example:** Scan a non-stick pan → the agent detects a PFOA-based coating → verdict **UNSAFE** → it explains why PFOA is a concern for cookware → and suggests a ceramic-coated alternative you can buy.
 
 <!-- Screenshot: the premium consumer UI showing a verdict card — the UNSAFE Teflon pan card (red badge, PFOA/PTFE tags, ceramic-pan safer alternative, buy button, citations) is the strongest choice. Save as docs/verdict-card.png -->
-![Clean Label Agent verdict card](teflon.png)
+![Clean Label Agent verdict card](Docs/teflon.png)
 
 ## Why an Agent?
 
@@ -63,7 +65,7 @@ That chain of perceive → decide → act → verify → explain is exactly what
 
 The diagram below is the agent's actual execution graph, showing every node in the workflow — from perception and confidence-gated clarification through the PubChem hazard lookup, the hallucination guard, the human-in-the-loop Vibe Diff, and the final verdict with a safer-alternative offer.
 
-![Architecture Diagram](architecture.png)
+![Architecture Diagram](Docs/architecture.png)
 
 <details>
 <summary><b>Annotated text flow</b> (click to expand — shows how each course concept maps to the graph)</summary>
@@ -166,8 +168,10 @@ The guard enforces one rule: *every chemical hazard the agent reports must be tr
 
 Just as important, the guard distinguishes the **intrinsic hazard of a raw chemical** from the **actual risk of that ingredient in a finished product at normal use.** A GHS "harmful if swallowed" note on a raw industrial material does **not**, by itself, make a leave-on cosmetic UNSAFE. Hazard interpretation is routed by category: ingestion risk matters for food, skin-absorption and allergen risk for skincare, off-gassing and contact risk for cleaning and cookware. This prevents the agent from being alarmist about benign ingredients.
 
+This same rigor doubles as an education feature. When the agent explains that a Teflon pan is UNSAFE "because of PFOA, a persistent bioaccumulative toxin linked to cancer and reproductive harm," it is teaching the user real toxicology in one sentence — not just handing down a verdict. Because every claim is source-verified, that education is never a guess dressed up as fact — directly advancing the track's goal of *advancing education* alongside *managing public health*.
+
 <!-- Screenshot: raw PubChem hazard data (e.g. aluminum flagged "catches fire / damages organs") next to the honest verdict that says these are industrial-handling hazards, not consumer risk. Save as docs/hallucination-guard.png -->
-![Raw hazard data vs. the agent's honest verdict](hallucination-guard.png)
+![Raw hazard data vs. the agent's honest verdict](Docs/hallucination-guard.png)
 
 ## Human-in-the-Loop Checkpoints
 
@@ -179,7 +183,7 @@ The agent pauses for a human at **two** points, but only when it matters:
 Both checkpoints are recorded in the OpenTelemetry trace, making every human decision observable.
 
 <!-- Screenshot: the Vibe Diff Audit Checkpoint modal — raw database facts on the left, drafted verdict on the right, Approve/Reject buttons. Save as docs/vibe-diff.png -->
-![Human-in-the-loop Vibe Diff checkpoint](vibe-diff.png)
+![Human-in-the-loop Vibe Diff checkpoint](Docs/vibe-diff.png)
 
 ## Setup & Installation
 
@@ -304,23 +308,22 @@ clean-label-agent/
     └── golden_dataset.json       # 12-product golden evaluation set
 ```
 
+## Agents for Good: Public Health + Education
+
+This project serves the track's mission on two fronts, not one:
+
+- **Managing public health** — an honest verdict at the moment of purchase turns an invisible, population-scale chemical exposure risk into a visible, individual choice, with a safer alternative offered right there.
+- **Advancing education** — every explanation is also a lesson in real toxicology (e.g. *why* PFOA is a concern, *why* a raw-material GHS warning doesn't apply to a finished product), building a person's ability to read any label more critically over time, not just this one.
+
 ## Team
 
 | Role | Responsibilities |
 |------|------------------|
 | **Anahita Esmaeilian** — Lead / Architect | Core agent loop, MCP client, hallucination guard, OpenTelemetry, semantic skill routing, documentation |
-| **Ali Mahdavi** — Specialist | Agent skills, toxicology sub-agent, A2UI card, Vibe Diff, commerce integration, tests |
+| **Ali Mahdavi Mazdeh** — Specialist | Agent skills, toxicology sub-agent, A2UI card, Vibe Diff, commerce integration, tests |
 
 Kaggle usernames: `anahitaesmaeilian`, `alimahdavimazdeh`
 
 ---
-
-<!-- TODO before submission:
-  1. Add docs/architecture.png (your architecture diagram)
-  2. Add a screenshot of the A2UI safety card
-  3. Add a screenshot of an OpenTelemetry trace
-  4. Fill in real names, Kaggle usernames, and the repo URL
-  5. Confirm the run commands match your actual CLI entry point
--->
 
 *Built with Gemini Antigravity for the Google × Kaggle 5-Day AI Agents Capstone — Agents for Good.*
