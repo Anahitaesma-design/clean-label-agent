@@ -45,7 +45,7 @@ The **Clean Label Agent** closes that gap. Give it a product by **barcode, name,
 > **Example:** Scan a non-stick pan → the agent detects a PFOA-based coating → verdict **UNSAFE** → it explains why PFOA is a concern for cookware → and suggests a ceramic-coated alternative you can buy.
 
 <!-- Screenshot: the premium consumer UI showing a verdict card — the UNSAFE Teflon pan card (red badge, PFOA/PTFE tags, ceramic-pan safer alternative, buy button, citations) is the strongest choice. Save as docs/verdict-card.png -->
-![Clean Label Agent verdict card](teflon.png)
+![Clean Label Agent verdict card](Docs/teflon.png)
 
 ## Why an Agent?
 
@@ -63,7 +63,7 @@ That chain of perceive → decide → act → verify → explain is exactly what
 
 The diagram below is the agent's actual execution graph, showing every node in the workflow — from perception and confidence-gated clarification through the PubChem hazard lookup, the hallucination guard, the human-in-the-loop Vibe Diff, and the final verdict with a safer-alternative offer.
 
-![Architecture Diagram](architecture.png)
+![Architecture Diagram](Docs/architecture.png)
 
 <details>
 <summary><b>Annotated text flow</b> (click to expand — shows how each course concept maps to the graph)</summary>
@@ -167,7 +167,7 @@ The guard enforces one rule: *every chemical hazard the agent reports must be tr
 Just as important, the guard distinguishes the **intrinsic hazard of a raw chemical** from the **actual risk of that ingredient in a finished product at normal use.** A GHS "harmful if swallowed" note on a raw industrial material does **not**, by itself, make a leave-on cosmetic UNSAFE. Hazard interpretation is routed by category: ingestion risk matters for food, skin-absorption and allergen risk for skincare, off-gassing and contact risk for cleaning and cookware. This prevents the agent from being alarmist about benign ingredients.
 
 <!-- Screenshot: raw PubChem hazard data (e.g. aluminum flagged "catches fire / damages organs") next to the honest verdict that says these are industrial-handling hazards, not consumer risk. Save as docs/hallucination-guard.png -->
-![Raw hazard data vs. the agent's honest verdict](hallucination-guard.png)
+![Raw hazard data vs. the agent's honest verdict](Docs/hallucination-guard.png)
 
 ## Human-in-the-Loop Checkpoints
 
@@ -179,7 +179,7 @@ The agent pauses for a human at **two** points, but only when it matters:
 Both checkpoints are recorded in the OpenTelemetry trace, making every human decision observable.
 
 <!-- Screenshot: the Vibe Diff Audit Checkpoint modal — raw database facts on the left, drafted verdict on the right, Approve/Reject buttons. Save as docs/vibe-diff.png -->
-![Human-in-the-loop Vibe Diff checkpoint](vibe-diff.png)
+![Human-in-the-loop Vibe Diff checkpoint](Docs/vibe-diff.png)
 
 ## Setup & Installation
 
@@ -206,18 +206,17 @@ pip install -r requirements.txt
 
 ## Running the Agent
 
+You can run the agent locally using the **Google Agent Development Kit (ADK) CLI**:
+
 ```bash
-# Scan by barcode
-python -m src.agent --barcode 3017620422003
+# 1. Start local interactive CLI session
+python -m google.adk.cli run src/
 
-# Look up by product name
-python -m src.agent --name "Non-stick frying pan"
+# 2. Run with a single query directly (e.g. Teflon Pan)
+python -m google.adk.cli run src/ "Classic Teflon Pan"
 
-# Analyze from an image of the label
-python -m src.agent --image path/to/label.jpg
-
-# Analyze a raw ingredient list
-python -m src.agent --ingredients "aqua, glycerin, niacinamide, phenoxyethanol"
+# 3. Start the Web Playground and developer trace UI
+python -m google.adk.cli web src/ --port 8501 --allow_origins=*
 ```
 
 The agent prints its verdict, explanation, cited sources, and a safer alternative, and (if the UI layer is enabled) renders an interactive safety card.

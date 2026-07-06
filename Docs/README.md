@@ -206,18 +206,17 @@ pip install -r requirements.txt
 
 ## Running the Agent
 
+You can run the agent locally using the **Google Agent Development Kit (ADK) CLI**:
+
 ```bash
-# Scan by barcode
-python -m src.agent --barcode 3017620422003
+# 1. Start local interactive CLI session
+python -m google.adk.cli run src/
 
-# Look up by product name
-python -m src.agent --name "Non-stick frying pan"
+# 2. Run with a single query directly (e.g. Teflon Pan)
+python -m google.adk.cli run src/ "Classic Teflon Pan"
 
-# Analyze from an image of the label
-python -m src.agent --image path/to/label.jpg
-
-# Analyze a raw ingredient list
-python -m src.agent --ingredients "aqua, glycerin, niacinamide, phenoxyethanol"
+# 3. Start the Web Playground and developer trace UI
+python -m google.adk.cli web src/ --port 8501 --allow_origins=*
 ```
 
 The agent prints its verdict, explanation, cited sources, and a safer alternative, and (if the UI layer is enabled) renders an interactive safety card.
