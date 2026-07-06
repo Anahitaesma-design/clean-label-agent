@@ -311,7 +311,7 @@ clean-label-agent/
 | **Anahita Esmaeilian** — Lead / Architect | Core agent loop, MCP client, hallucination guard, OpenTelemetry, semantic skill routing, documentation |
 | **Ali Mahdavi** — Specialist | Agent skills, toxicology sub-agent, A2UI card, Vibe Diff, commerce integration, tests |
 
-Kaggle usernames: `[your-kaggle-username]`, `[ali-kaggle-username]`
+Kaggle usernames: `anahitaesmaeilian`, `alimahdavimazdeh`
 
 ---
 
