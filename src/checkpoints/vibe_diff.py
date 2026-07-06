@@ -66,6 +66,10 @@ def require_approval(verdict: Dict[str, Any], raw_findings: Dict[str, Any]) -> b
     if os.environ.get("AUTO_APPROVE") == "true":
         print("[VIBE DIFF] Auto-approved via environment variable.")
         return True
+
+    # If running via the ADK web server, fallback to the resumable RequestInput UI flow
+    if "web" in sys.argv:
+        raise RuntimeError("Web server detected. Falling back to UI approval modal.")
         
     if not sys.stdin.isatty():
         print("[VIBE DIFF] Non-interactive shell detected. Auto-approving for workflow continuity.")
