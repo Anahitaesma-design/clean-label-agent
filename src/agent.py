@@ -3,7 +3,7 @@
 
 import os
 import sys
-from typing import Dict, Any, List, Generator
+from typing import Dict, Any, List, Generator, Optional
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
