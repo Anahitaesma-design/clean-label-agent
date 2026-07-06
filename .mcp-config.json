@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "open-food-facts": {
+      "command": "python",
+      "args": ["-m", "src.tools.mcp_client"],
+      "env": {
+        "ENV_MODE": "production",
+        "READ_ONLY": "true"
+      }
+    },
+    "ewg-safety": {
+      "command": "python",
+      "args": ["-m", "src.tools.mcp_client"],
+      "env": {
+        "ENV_MODE": "production",
+        "READ_ONLY": "true"
+      }
+    }
+  }
+}

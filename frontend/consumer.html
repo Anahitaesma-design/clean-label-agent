@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clean Label Safety Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="consumer.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <i data-lucide="shield-check" class="icon-logo"></i>
+        <h1>Clean Label <span>Safety Scanner</span></h1>
+      </div>
+      <div class="status-indicator">
+        <span class="pulse-dot"></span>
+        <span class="status-text">Backend Connected</span>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <img src="kaggle_thumbnail.png" alt="Clean Label Agent" class="banner-img">
+      </div>
+
+      <!-- Search / Input Panel -->
+      <section class="scan-panel glass-panel">
+        <h2><i data-lucide="scan-barcode"></i> Scan or Search Product</h2>
+        <p class="panel-desc">Enter a product name, ingredient list, or barcode to query safety databases and GHS chemical hazard records.</p>
+        
+        <form id="scan-form" class="search-form">
+          <div class="input-wrapper">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="query-input" placeholder="Enter product name (e.g. Teflon Pan) or barcode..." required>
+            <button type="submit" class="btn-submit">Scan Product</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Dynamic Loading Status -->
+      <section id="loading-panel" class="loading-panel glass-panel hidden">
+        <div class="loader-circle">
+          <div class="spinner"></div>
+          <i data-lucide="refresh-cw" class="icon-spin"></i>
+        </div>
+        <h3 id="loading-title">Scanning Product...</h3>
+        <p id="loading-status">Initiating connection to safety databases...</p>
+      </section>
+
+      <!-- HITL Category Clarification Panel -->
+      <section id="hitl-category-panel" class="hitl-panel glass-panel hidden">
+        <div class="hitl-header">
+          <i data-lucide="help-circle" class="hitl-icon"></i>
+          <div>
+            <h3>Product Category Clarification</h3>
+            <p>We need your input to route this scan correctly. Please select the product category below:</p>
+          </div>
+        </div>
+        <div class="hitl-options">
+          <button class="btn-option" data-category="food"><i data-lucide="apple"></i> Food / Edible</button>
+          <button class="btn-option" data-category="skincare"><i data-lucide="sparkles"></i> Skincare / Cosmetic</button>
+          <button class="btn-option" data-category="cookware"><i data-lucide="flame"></i> Cookware</button>
+          <button class="btn-option" data-category="cleaning"><i data-lucide="droplet"></i> Cleaning Product</button>
+          <button class="btn-option btn-danger" data-category="none"><i data-lucide="x-circle"></i> None of these</button>
+        </div>
+      </section>
+
+      <!-- HITL Vibe Diff Approval Modal -->
+      <div id="vibe-diff-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel">
+          <div class="modal-header">
+            <i data-lucide="alert-triangle" class="warning-icon"></i>
+            <h2>Vibe Diff Audit Checkpoint</h2>
+          </div>
+          <p class="modal-desc">This product has been flagged as high-risk or carries toxic ingredients. Please audit raw database facts against the drafted verdict card before rendering:</p>
+          
+          <div class="audit-split">
+            <!-- Left Side: Raw Facts -->
+            <div class="audit-card raw-facts">
+              <h3><i data-lucide="database"></i> Raw Database Facts</h3>
+              <div id="raw-facts-content" class="facts-content">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+            
+            <!-- Right Side: Drafted Verdict -->
+            <div class="audit-card drafted-report">
+              <h3><i data-lucide="file-text"></i> Drafted Report Card</h3>
+              <div class="draft-content">
+                <div class="draft-verdict-badge unsafe" id="draft-verdict-badge">UNSAFE</div>
+                <div class="draft-detail">
+                  <strong>Explanation:</strong>
+                  <p id="draft-verdict-explanation">Loading...</p>
+                </div>
+                <div class="draft-detail">
+                  <strong>Chemicals of Concern:</strong>
+                  <p id="draft-verdict-chemicals">None</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button id="btn-reject" class="btn-action btn-danger-action"><i data-lucide="x"></i> Reject & Flag</button>
+            <button id="btn-approve" class="btn-action btn-success-action"><i data-lucide="check"></i> Approve Verdict</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verdict Report Card View -->
+      <section id="verdict-panel" class="verdict-panel glass-panel hidden">
+        <!-- Badge and Basic Details -->
+        <div class="verdict-hero">
+          <div class="product-image-container">
+            <img id="verdict-product-image" src="" alt="Product Image" class="product-image hidden">
+            <div id="verdict-product-icon" class="product-icon-placeholder">
+              <i id="placeholder-icon-tag" data-lucide="package" style="width: 2rem; height: 2rem;"></i>
+            </div>
+          </div>
+          <div class="verdict-title-area">
+            <div id="verdict-badge" class="verdict-status-badge safe">SAFE</div>
+            <div class="verdict-title">
+              <h2 id="verdict-product-name">Product Name</h2>
+              <span id="verdict-category" class="category-tag">Category</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="verdict-details">
+          <!-- Safety Explanation -->
+          <div class="detail-section explanation-section">
+            <h3><i data-lucide="info"></i> Safety Explanation</h3>
+            <p id="verdict-explanation">Explanation text goes here...</p>
+          </div>
+
+          <!-- Chemicals of Concern -->
+          <div id="chemicals-section" class="detail-section chemicals-section hidden">
+            <h3><i data-lucide="alert-octagon"></i> Chemicals of Concern</h3>
+            <div id="verdict-chemicals-container" class="chemical-tags">
+              <!-- Chemical badges populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Safer Alternative -->
+          <div id="alternative-section" class="detail-section alternative-section hidden">
+            <h3><i data-lucide="shopping-cart"></i> Suggested Cleaner Alternative</h3>
+            <div class="alt-product-card">
+              <div class="alt-details">
+                <h4 id="alt-product-name">Alternative Product</h4>
+                <div class="alt-meta">
+                  <span id="alt-retailer">Target</span>
+                  <span id="alt-price">$0.00</span>
+                </div>
+              </div>
+              <a href="#" id="alt-buy-btn" target="_blank" class="btn-buy"><i data-lucide="external-link"></i> Buy Cleaner Alternative</a>
+            </div>
+          </div>
+
+          <!-- Citations & Sources -->
+          <div class="detail-section citations-section">
+            <h3><i data-lucide="link"></i> Citations & Sources</h3>
+            <ul id="verdict-citations-list" class="citations-list">
+              <!-- Citations populated dynamically -->
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="consumer.js?v=2"></script>
+  
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

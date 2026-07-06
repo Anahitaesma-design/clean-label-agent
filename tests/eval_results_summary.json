@@ -1,0 +1,114 @@
+{
+  "accuracy": 75.0,
+  "failed_barcodes": [],
+  "results": [
+    {
+      "case_id": "FOOD-SAFE",
+      "input_used": "030000010204",
+      "expected_verdict": "SAFE",
+      "actual_verdict": "SAFE",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "FOOD-CAUTION",
+      "input_used": "049000006346",
+      "expected_verdict": "CAUTION",
+      "actual_verdict": "CAUTION",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "FOOD-UNSAFE",
+      "input_used": "044700000632",
+      "expected_verdict": "UNSAFE",
+      "actual_verdict": "CAUTION",
+      "category_correct": "YES",
+      "score": 5.5,
+      "status": "FAIL"
+    },
+    {
+      "case_id": "COSMETIC-SAFE",
+      "input_used": "345334300168",
+      "expected_verdict": "SAFE",
+      "actual_verdict": "SAFE",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "COSMETIC-CAUTION",
+      "input_used": "Bath & Body Works fragrance body lotion",
+      "expected_verdict": "CAUTION",
+      "actual_verdict": "CAUTION",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "COSMETIC-UNSAFE",
+      "input_used": "Suave Lotion listing DMDM hydantoin",
+      "expected_verdict": "UNSAFE",
+      "actual_verdict": "UNSAFE",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "CLEANING-SAFE",
+      "input_used": "018787771259",
+      "expected_verdict": "SAFE",
+      "actual_verdict": "SAFE",
+      "category_correct": "NO",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "CLEANING-CAUTION",
+      "input_used": "Method All-Purpose Cleaner",
+      "expected_verdict": "CAUTION",
+      "actual_verdict": "UNSAFE",
+      "category_correct": "YES",
+      "score": 5.5,
+      "status": "FAIL"
+    },
+    {
+      "case_id": "CLEANING-UNSAFE",
+      "input_used": "044600324135",
+      "expected_verdict": "UNSAFE",
+      "actual_verdict": "CAUTION",
+      "category_correct": "YES",
+      "score": 5.5,
+      "status": "FAIL"
+    },
+    {
+      "case_id": "COOKWARE-SAFE",
+      "input_used": "All-Clad D3 Stainless Steel Fry Pan",
+      "expected_verdict": "SAFE",
+      "actual_verdict": "SAFE",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "COOKWARE-CAUTION",
+      "input_used": "T-fal PFOA-free non-stick pan",
+      "expected_verdict": "CAUTION",
+      "actual_verdict": "CAUTION",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    },
+    {
+      "case_id": "COOKWARE-UNSAFE",
+      "input_used": "Classic older Teflon pan containing PFOA",
+      "expected_verdict": "UNSAFE",
+      "actual_verdict": "UNSAFE",
+      "category_correct": "YES",
+      "score": 10.0,
+      "status": "PASS"
+    }
+  ]
+}

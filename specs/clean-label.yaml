@@ -1,0 +1,97 @@
+# BDD Gherkin Specification for Clean Label Agent
+# This file is the single source of truth for the agent's behavior.
+# Implementation must satisfy all scenarios defined below.
+
+feature: Clean Label Agent Product Safety Scanner
+description: |
+  An AI product safety scanner that evaluates consumer products (food, cookware, skincare, cleaning)
+  by name, barcode, or photo, queries ingredient safety databases via MCP, runs a toxicology audit,
+  and delivers a verdict (SAFE / CAUTION / UNSAFE) with citations and safer alternatives.
+
+scenarios:
+  - id: scenario-1-unsafe-food-additive
+    name: Scan a food item with a banned additive
+    given: |
+      - A product named "Sparkling Grape Soda" exists.
+      - The Open Food Facts database shows it contains "Carbonated Water, High Fructose Corn Syrup, Red 3, Sodium Benzoate".
+      - "Red 3" is recognized as a banned color additive by the food safety skill.
+    when: |
+      - The user scans "Sparkling Grape Soda" by name.
+    then: |
+      - The agent perceives the food item and plans to load the 'food' safety skill.
+      - The agent queries the Open Food Facts MCP database for "Sparkling Grape Soda".
+      - The toxicology sub-agent analyzes the ingredients and flags "Red 3" as a hazard (high rating).
+      - The agent observes no database conflicts and generates an UNSAFE verdict.
+      - The output includes an explanation of the hazard and cites the source of the ban.
+      - The A2UI report card displays a red UNSAFE badge.
+
+  - id: scenario-2-unsafe-cookware-with-alternative
+    name: Scan a non-stick pan with PFOA and suggest alternative
+    given: |
+      - A product named "Classic Teflon Pan" contains PTFE and PFOA.
+      - The EWG cookware safety database identifies "PFOA" as highly toxic/persistent (PFAS family).
+    when: |
+      - The user requests a scan for "Classic Teflon Pan".
+    then: |
+      - The agent perceives the query and plans to load the 'cookware' safety skill.
+      - The agent queries the EWG MCP database.
+      - The toxicology sub-agent flags "PFOA" as UNSAFE.
+      - The commerce module searches for a ceramic alternative using UCP.
+      - The final verdict is UNSAFE, citing the PFOA hazard.
+      - The response includes a collapsible card offering a "Ceramic Frying Pan" with an AP2 purchase buy-link.
+
+  - id: scenario-3-clean-skincare-cream
+    name: Scan a clean skincare cream
+    given: |
+      - A skincare product named "Gentle Oats Moisturizer" contains "Avena Sativa, Glycerin, Water, Jojoba Oil".
+      - EWG Skin Deep database rates all these ingredients as hazard levels 1-2 (low risk).
+    when: |
+      - The user scans "Gentle Oats Moisturizer".
+    then: |
+      - The agent perceives the skincare product and plans to load the 'skincare' safety skill.
+      - The agent queries the EWG MCP database.
+      - The toxicology sub-agent evaluates all ingredients and scores them as low hazard (level 1-2).
+      - The agent issues a SAFE verdict.
+      - The A2UI report card displays a green SAFE badge with a collapsible list of all clean ingredients.
+
+  - id: scenario-4-product-not-found-graceful-fallback
+    name: Product not found in any database
+    given: |
+      - A product named "Super-Gizmo Shiny Paste" is queried.
+      - Neither Open Food Facts nor EWG databases contain any records for this product or its ingredients.
+    when: |
+      - The user scans "Super-Gizmo Shiny Paste".
+    then: |
+      - The agent queries the MCP databases.
+      - The databases return no results.
+      - The agent observes the lack of information and does not invent or hallucinate ingredients.
+      - The agent returns an UNKNOWN verdict.
+      - The response gracefully explains that the product could not be found and prompts the user to input the ingredients manually.
+
+  - id: scenario-5-high-risk-vibe-diff-approval
+    name: High-risk baby product requires human-in-the-loop approval
+    given: |
+      - A baby product named "Baby Sleepy Lotion" contains "Phenoxyethanol".
+      - The toxicology sub-agent flags "Phenoxyethanol" as a caution risk (moderate hazard).
+      - The product category is identified as high-risk ("baby product").
+    when: |
+      - The user scans "Baby Sleepy Lotion".
+    then: |
+      - The agent generates a CAUTION verdict.
+      - The agent detects the high-risk baby category.
+      - The workflow triggers the Vibe Diff checkpoint.
+      - The agent displays a structured side-by-side comparison of raw database findings vs the drafted safety card.
+      - The workflow pauses and awaits explicit human approval before presenting the verdict to the user.
+      - Once approved by the user, the verdict is rendered in the UI.
+
+  - id: scenario-6-source-citation-mandatory
+    name: Every verdict must cite at least one source
+    given: |
+      - A product scan is performed on "Organic Apple Cider Vinegar".
+      - The agent determines the product is SAFE.
+    when: |
+      - The final verdict is generated.
+    then: |
+      - The output verdict object must contain a non-empty list of sources.
+      - Each source must include a name (e.g., "Open Food Facts") and a valid reference URL.
+      - The A2UI report card renders clickable links for the cited sources.

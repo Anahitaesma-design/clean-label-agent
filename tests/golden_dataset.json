@@ -1,0 +1,86 @@
+[
+  {
+    "case_id": "FOOD-SAFE",
+    "input_barcode": "030000010204",
+    "input_name": "Quaker Old Fashioned Rolled Oats",
+    "category": "food",
+    "expected_verdict": "SAFE"
+  },
+  {
+    "case_id": "FOOD-CAUTION",
+    "input_barcode": "049000006346",
+    "input_name": "Coca-Cola Classic",
+    "category": "food",
+    "expected_verdict": "CAUTION"
+  },
+  {
+    "case_id": "FOOD-UNSAFE",
+    "input_barcode": "044700000632",
+    "input_name": "Oscar Mayer Bacon",
+    "category": "food",
+    "expected_verdict": "UNSAFE"
+  },
+  {
+    "case_id": "COSMETIC-SAFE",
+    "input_barcode": "345334300168",
+    "input_name": "Vanicream Moisturizing Cream",
+    "category": "skincare",
+    "expected_verdict": "SAFE"
+  },
+  {
+    "case_id": "COSMETIC-CAUTION",
+    "input_barcode": "",
+    "input_name": "Bath & Body Works fragrance body lotion",
+    "category": "skincare",
+    "expected_verdict": "CAUTION"
+  },
+  {
+    "case_id": "COSMETIC-UNSAFE",
+    "input_barcode": "",
+    "input_name": "Suave Lotion listing DMDM hydantoin",
+    "category": "skincare",
+    "expected_verdict": "UNSAFE"
+  },
+  {
+    "case_id": "CLEANING-SAFE",
+    "input_barcode": "018787771259",
+    "input_name": "Dr. Bronner's Pure-Castile Liquid Soap",
+    "category": "cleaning",
+    "expected_verdict": "SAFE"
+  },
+  {
+    "case_id": "CLEANING-CAUTION",
+    "input_barcode": "",
+    "input_name": "Method All-Purpose Cleaner",
+    "category": "cleaning",
+    "expected_verdict": "CAUTION"
+  },
+  {
+    "case_id": "CLEANING-UNSAFE",
+    "input_barcode": "044600324135",
+    "input_name": "Clorox Regular Bleach",
+    "category": "cleaning",
+    "expected_verdict": "UNSAFE"
+  },
+  {
+    "case_id": "COOKWARE-SAFE",
+    "input_barcode": "",
+    "input_name": "All-Clad D3 Stainless Steel Fry Pan",
+    "category": "cookware",
+    "expected_verdict": "SAFE"
+  },
+  {
+    "case_id": "COOKWARE-CAUTION",
+    "input_barcode": "",
+    "input_name": "T-fal PFOA-free non-stick pan",
+    "category": "cookware",
+    "expected_verdict": "CAUTION"
+  },
+  {
+    "case_id": "COOKWARE-UNSAFE",
+    "input_barcode": "",
+    "input_name": "Classic older Teflon pan containing PFOA",
+    "category": "cookware",
+    "expected_verdict": "UNSAFE"
+  }
+]
